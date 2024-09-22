@@ -1,0 +1,16 @@
+here's the project in so many words: a point and click.
+
+first the scene situation, with a navigation system through interconnected nodes (s_node structures)
+then displaying them through descriptions, and checking all memory leaks issues
+then actually traveling it in the terminal
+adding go_backs
+
+all done !
+
+then expanding it into a fleshed out story_map
+adding a user_structure and action_objects in the s_nodes to be able to "unlock" added features of a scene or choices (maybe a char*tab* ? to be able to find more easily, using a placement int within the scene structure)
+
+can't wait !
+
+alright, everything above works as needed, will come back to this to expand on the world building we want to see and work around the action_objects method
+i maybe want this to be prophecy related, just exploration or character interaction included ? we'll see
