@@ -8,10 +8,13 @@ s_node  *create_snode(char *desc)
   if (new_item == NULL)
     return (NULL);
   new_item->desc = desc;
+  new_item->desc_locked = NULL;
+  new_item->locked = 0;
+  new_item->obj = 0;
   new_item->choose_one = NULL;
   new_item->choose_two = NULL;
-  new_item->choose_three= NULL;
-  new_item->desc_choices = NULL;
+  new_item->choose_obj = NULL;
+  new_item->desc_obj = NULL;
   new_item->option1 = NULL;
   new_item->option2 = NULL;
   new_item->back = NULL;
@@ -22,14 +25,16 @@ void  free_prot(s_node  *head)
 {
   if (head->desc != NULL)
     free(head->desc);
-  if (head->desc_choices != NULL)
-    free(head->desc_choices);
+  if (head->desc_locked != NULL)
+    free(head->desc_locked);
+  if (head->desc_obj != NULL)
+    free(head->desc_obj);
   if (head->choose_one != NULL)
     free(head->choose_one);
   if (head->choose_two != NULL)
     free(head->choose_two);
-  if (head->choose_three != NULL)
-    free(head->choose_three);
+  if (head->choose_obj != NULL)
+    free(head->choose_obj);
   if (head->option1 != NULL)
     free_prot(head->option1);
   if (head->option2 != NULL)
@@ -59,26 +64,34 @@ char  *translate_str(char *str)
   return (new_str);
 }
 
-s_node  *create_game(void)
+s_node  *create_game(u_node *user)
 {
   s_node  *game_head;
-  char  *description;
 
   game_head = create_snode(translate_str("This house is so beautiful. It's almost hard to believe I actually own it. Sure, the walls will need some renovations, but...\nStill. Beautiful."));
   if (game_head == NULL)
     return (NULL);
-  game_head->desc_choices = translate_str("enter  window");
   game_head->option1 = create_snode(translate_str("Ah, that familiar old house smell.\nOr could it be mold ? Hm."));
-  game_head->option1->desc_choices = translate_str("corridor  stairs");
   game_head->option1->choose_one = translate_str("corridor");
   game_head->option1->choose_two = translate_str("stairs");
   game_head->option1->option1 = create_snode(translate_str("I'm pretty sure this looked less decrepit when I visited, but hey, I can still see the vision !\nA little cleaning, some sky blue wallpaper... I could do something with this."));
   game_head->option1->option1->back = game_head->option1;
   game_head->option1->option2 = create_snode(translate_str("I... don't think I can climb that. That doesn't look structurally sound."));
+  game_head->option1->option1->choose_one = translate_str("door");
+  game_head->option1->option1->option1 = create_snode(translate_str("Okay. If I remember correctly, this should be the bathroom."));
+  game_head->option1->option1->option1->desc_locked = translate_str(" Locked, though. Maybe there's a key around somewhere ?");
+  game_head->option1->option1->option1->locked = 1;
   game_head->option1->option2->back = game_head->option1;
   game_head->choose_one = translate_str("enter");
   game_head->choose_two = translate_str("window");
   game_head->option2 = create_snode(translate_str("Huh.\nYeah, that's... That's broken alright. I'll have to fix that."));
+  game_head->option2->desc_obj = translate_str(" Wait, is that... a key ?");
+  game_head->option1->option1->option1->option1 = create_snode(translate_str("So it might need a little visit from the plumber, okay. But the tiling is pretty cute, so...\nAt least there's that ?"));
+  game_head->option1->option1->option1->option1->back = game_head->option1->option1;
+  game_head->option1->option1->option1->back = game_head->option1->option1;
+  game_head->option2->obj = 1;
+  user->obj_names[0] = translate_str("key");
+  game_head->option2->choose_obj = translate_str("key");
   game_head->option1->back = game_head;
   game_head->option2->back = game_head;
   return (game_head);
@@ -87,11 +100,21 @@ s_node  *create_game(void)
 int main (void)
 {
   s_node  *head;
+  u_node  *user;
 
-  head = create_game();
+  user = create_user();
+  head = create_game(user);
   if (head != NULL)
   {
-    read_game(head);
+    if (user == NULL)
+    {
+      free_prot(head);
+      return (0);
+    }
+    read_game(head, user);
     free_prot(head);
+    free_prot_u(user);
   }
+  else if (user != NULL)
+    free_prot_u(user);
 }

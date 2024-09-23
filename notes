@@ -4,13 +4,21 @@ first the scene situation, with a navigation system through interconnected nodes
 then displaying them through descriptions, and checking all memory leaks issues
 then actually traveling it in the terminal
 adding go_backs
+adding a user_structure and action_objects in the s_nodes to be able to "unlock" added features of a scene or choices (maybe a char*tab* ? to be able to find more easily, using a placement int within the scene structure) => int tab, actually, because numbers are easier to allocate and also to keep track of !
+makefile added for easier compilation
 
 all done !
 
-then expanding it into a fleshed out story_map
-adding a user_structure and action_objects in the s_nodes to be able to "unlock" added features of a scene or choices (maybe a char*tab* ? to be able to find more easily, using a placement int within the scene structure)
+then expanding it into a fleshed out story_map, can't wait =)
 
-can't wait !
+alright, everything above works as needed:
+we can now use objects within the inventory to unlock new possibilities, flow moves freely past the obstacle once removed the one time (okayed using a -1 instead of a zero for unlocked vs never locked in the first place)
 
-alright, everything above works as needed, will come back to this to expand on the world building we want to see and work around the action_objects method
+
+
+will come back to this to expand on the world building we want to see
+
 i maybe want this to be prophecy related, just exploration or character interaction included ? we'll see
+
+go back glitches fsr
+also give a rulebook of some kind so people know what to do: "help" command

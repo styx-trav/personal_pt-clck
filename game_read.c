@@ -1,131 +1,123 @@
 #include "libby.h"
 
-int cmp(char *str, char *str2)
+int  use_inventory(s_node *room, u_node *user)
 {
+  int obj;
   int i;
+  char  a;
 
-  if (str == NULL)
-    return (1);
   i = 0;
-  while (str[i] && str2[i] && str2[i] == str[i])
+  obj = 0;
+  write(1, "\nYou currently have ", 20);
+  while (i < 3)
+  {
+    if (user->obj_tab[i] == 1)
+      obj++;
     i++;
-  if (str[i] == '\0'
-    && (str2[i] == '\0' || (str2[i] == '\n' && str2[i +1] == '\0')))
-    return (0);
+  }
+  a = obj + '0';
+  write(1, &a, 1);
+  write(1, " item", 5);
+  if (obj > 1)
+    write(1, "s", 1);
+  if (obj == 0)
+    write(1, ".\n", 2);
   else
-    return (1);
-}
-
-int compare(char *opt1, char *opt2, char *read)
-{
-  char  *quit;
-  char  *go_back;
-
-  quit = malloc(sizeof(char) * 5);
-  if (quit == NULL)
-    return (-1);
-  quit[0] = 'q';
-  quit[1] = 'u';
-  quit[2] = 'i';
-  quit[3] = 't';
-  quit[4] = '\0';
-  go_back = malloc(sizeof(char) * 8);
-  go_back[0] = 'g';
-  go_back[1] = 'o';
-  go_back[2] = ' ';
-  go_back[3] = 'b';
-  go_back[4] = 'a';
-  go_back[5] = 'c';
-  go_back[6] = 'k';
-  go_back[7] = '\0';
-  if (cmp(quit, read) == 0)
+    write(1, ":\n", 2);
+  i = 0;
+  while (i < 3)
   {
-    free(quit);
-    free(go_back);
+    if (user->obj_tab[i] == 1)
+      print_option(user->obj_names[i]);
+    i++;
+  }
+  obj = get_stdin(user->obj_names[0], user->obj_names[1], user->obj_names[2]);
+  if (obj == -1)
     return (-1);
-  }
-  free(quit);
-  if (cmp(go_back, read) == 0)
+  if (obj == room->locked && user->obj_tab[obj - 1] == 1)
   {
-    free(go_back);
-    return (4);
+    room->locked = -1;
+    return (0);
   }
-  free(go_back);
-  if (cmp(opt1, read) == 0)
-    return (1);
-  if (cmp(opt2, read) == 0)
-    return (2);
-  //if (cmp(opt3, read) == 0)
-    //return (3);
+  if (obj == 4)
+    return (0);
+  if (obj == 0
+    || (obj == room->locked && user->obj_tab[obj - 1] != 1))
+    write(1, "|| Nothing by that name\n", 25);
+  else
+    write(1, "|| This can't be used here.\n", 26);
+  use_inventory(room, user);
   return (0);
 }
 
-int  get_stdin(char *opt1, char *opt2)
-{
-  char  *str;
-  char  buffer[37];
-  int i;
-
-  i = 0;
-  while (i < 37)
-  {
-    buffer[i] = '\0';
-    i++;
-  }
-  read(1, buffer, 36);
-  i = 0;
-  while (buffer[i] != '\0')
-    i++;
-  str = malloc(sizeof(char) * (i + 1));
-  i = 0;
-  if (str == NULL)
-    return (0);
-  while (buffer[i] != '\0')
-  {
-    str[i] = buffer[i];
-    i++;
-  }
-  str[i] = '\0';
-  i = compare(opt1, opt2, str);
-  free(str);
-  return (i);
-}
-
-void  read_game(s_node  *head)
+void  read_game(s_node *head, u_node *user)
 {
   int choice;
 
+  if (head->locked == -1)
+  {
+    read_game(head->option1, user);
+    return ;
+  }
   if (head->desc == NULL)
     return ;
-  printf("\n\n%s\n\n", head->desc);
-  if (head->desc_choices != NULL)
-    printf("%s\n\n", head->desc_choices);
-  choice = 0;
-  choice = get_stdin(head->choose_one, head->choose_two);
+  write(1, "\n\n", 2);
+  printer(head->desc);
+  if (head->choose_obj != NULL && user->obj_tab[head->obj - 1] == 0)
+    printer(head->desc_obj);
+  if (head->locked > 0 && head->desc_locked != NULL)
+    printer(head->desc_locked);
+  write(1, "\n\n", 2);
+  if (head->choose_one != NULL)
+      print_option(head->choose_one);
+  if (head->choose_two != NULL)
+    print_option(head->choose_two);
+  if (head->choose_obj != NULL && user->obj_tab[head->obj - 1] == 0)
+    print_option(head->choose_obj);
+  choice = get_stdin(head->choose_one, head->choose_two, head->choose_obj);
   while (choice == 0)
   {
-    write(1, "\n\nPlease choose one of the given options:\n", 42);
-    if (head->desc_choices != NULL)
-      printf("%s  go back  quit\n", head->desc_choices);
-    else
-      write(1, "go back  quit\n", 14);
-    choice = get_stdin(head->choose_one, head->choose_two);
+    write(1, "\n|| Please choose one of the given options:\n", 44);
+    if (head->choose_one != NULL)
+      print_option(head->choose_one);
+    if (head->choose_two != NULL)
+      print_option(head->choose_two);
+    if (head->choose_obj != NULL)
+      print_option(head->choose_obj);
+    write(1, "|| go back\n|| quit\n", 19);
+    choice = get_stdin(head->choose_one, head->choose_two, head->choose_obj);
   }
   if (choice == 1 && head->option1 != NULL)
-    read_game(head->option1);
+    read_game(head->option1, user);
   if (choice == 2 && head->option2 != NULL)
-    read_game(head->option2);
-  //if (choice == 3 && head->option3 != NULL)
-    //read_game(head->option3);
+    read_game(head->option2, user);
+  if (choice == 3)
+  {
+    user->obj_tab[head->obj - 1] = 1;
+    write(1, "|| You now have: ", 17);
+    printer(head->choose_obj);
+    read_game(head, user);
+  }
+  if (choice == 5)
+  {
+    read_user(user);
+    read_game(head, user);
+  }
   if (choice == 4)
   {
     if (head->back != NULL)
-      read_game(head->back);
+      read_game(head->back, user);
     else
     {
-      printf("\nYou're at the start point.");
-      read_game(head);
+      write(1, "\n|| You're at the start point.", 31);
+      read_game(head, user);
     }
+  }
+  if (choice == 6)
+  {
+    if (use_inventory(head, user) == -1)
+      return ;
+    read_game(head, user);
   }
   return ;
 }
