@@ -32,6 +32,8 @@ int compare(char *opt1, char *opt2, char *obj, char *read)
     return (6);
   if (cmp(obj, read) == 0)
     return (3);
+  if (cmp("help", read) == 0)
+    return (7);
   return (0);
 }
 

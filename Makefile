@@ -1,7 +1,7 @@
 CC=cc
 FLAGS=-Wall -Werror -Wextra
 NAME=pt.click
-OBJS=game_creation.c game_read.c printing.c user.c user_interactions.c
+OBJS=game_creation.c game_read.c printing.c user.c help.c user_interactions.c
 LIBS=libby.h
 
 $(NAME): $(OBJS) $(LIBS)

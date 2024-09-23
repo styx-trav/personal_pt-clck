@@ -63,10 +63,10 @@ void  read_game(s_node *head, u_node *user)
     return ;
   write(1, "\n\n", 2);
   printer(head->desc);
+  if (head->obj == 13)
+    return ;
   if (head->choose_obj != NULL && user->obj_tab[head->obj - 1] == 0)
     printer(head->desc_obj);
-  if (head->locked > 0 && head->desc_locked != NULL)
-    printer(head->desc_locked);
   write(1, "\n\n", 2);
   if (head->choose_one != NULL)
       print_option(head->choose_one);
@@ -117,6 +117,11 @@ void  read_game(s_node *head, u_node *user)
   {
     if (use_inventory(head, user) == -1)
       return ;
+    read_game(head, user);
+  }
+  if (choice == 7)
+  {
+    help(1);
     read_game(head, user);
   }
   return ;
