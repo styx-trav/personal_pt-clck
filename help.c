@@ -69,9 +69,10 @@ void  help(int once)
   if (once == 0)
   {
     printer("\n\nWelcome to the rulebook !\nTo play, you can type in the options on the screen, for example:\n|| continue\n\0");
-    if (get_stdin_cmp("continue", NULL, NULL, NULL) != 1)
+    if (get_stdin_cmp("continue", NULL, NULL, NULL) == 1)
+      printer("\nGreat job ! Let's see what else you can do.\n\0");
+    else
       help(0);
-  printer("\nGreat job ! Let's see what else you can do.\n\0");
   }
   choice = 0;
   while (choice == 0)
@@ -81,7 +82,7 @@ void  help(int once)
     print_option("quit\0");
     print_option("going back\0");
     print_option("inventory\0");
-    choice = get_stdin_cmp("items", "quit", "go back", "inventory");
+    choice = get_stdin_cmp("items", "quit", "going back", "inventory");
   }
   disp_help(choice);
 }

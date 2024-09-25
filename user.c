@@ -2,27 +2,16 @@
 
 void  free_prot_u(u_node  *user)
 {
-  int i;
-
-  i = 0;
   if (user->name != NULL)
     free(user->name);
   if (user->obj_tab != NULL)
     free(user->obj_tab);
   if (user->obj_names != NULL)
-  {
-    while (i < 3)
-    {
-      if (user->obj_names[i] != NULL)
-        free(user->obj_names[i]);
-      i++;
-    }
     free(user->obj_names);
-  }
   free(user);
 }
 
-u_node  *create_user(void)
+u_node  *create_user(int tab)
 {
   u_node  *user;
   char  buffer[27];
@@ -54,7 +43,7 @@ u_node  *create_user(void)
     i++;
   }
   user->name[i] = '\0';
-  user->obj_tab = malloc(sizeof(int) * 3);
+  user->obj_tab = malloc(sizeof(int) * tab);
   if (user->obj_tab == NULL)
   {
     free_prot_u(user);
@@ -78,6 +67,7 @@ u_node  *create_user(void)
     user->obj_names[i] = NULL;
     i++;
   }
+  user->hp = 25;
   return (user);
 }
 

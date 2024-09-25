@@ -19,6 +19,10 @@ we can now use objects within the inventory to unlock new possibilities, flow mo
 will come back to this to expand on the world building we want to see
 
 i maybe want this to be prophecy related, just exploration or character interaction included ? we'll see
+maybe more some zelda kind of movement, right ? open world-ish concept, need some item to open a new zone, recreate a simple map
+
+maybe add checkpoints ? Like for bigger zones we could add pointers to a checkpoint within the zone, so it's easier to navigate. I'm gonna try it with the small version so I can get back to the spawn point, see how it works.
 
 go back glitches fsr -no ??? ig
 also give a rulebook of some kind so people know what to do: "help" command
+rulebook added, in help.c

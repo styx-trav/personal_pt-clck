@@ -34,6 +34,8 @@ int compare(char *opt1, char *opt2, char *obj, char *read)
     return (3);
   if (cmp("help", read) == 0)
     return (7);
+  if (cmp("checkpoint", read) == 0)
+    return (8);
   return (0);
 }
 

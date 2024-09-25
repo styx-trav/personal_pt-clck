@@ -54,15 +54,23 @@ void  read_game(s_node *head, u_node *user)
 {
   int choice;
 
+  if (head == NULL)
+    return ;
   if (head->locked == -1)
   {
     read_game(head->option1, user);
     return ;
   }
+  if (head->damage != 0)
+    damage_printer(user, head->damage, head->damage_msg);
+  if (head->unlocks != NULL && head->unlocks->locked_desc != NULL)
+    head->unlocks->desc = head->unlocks->locked_desc;
   if (head->desc == NULL)
     return ;
   write(1, "\n\n", 2);
-  printer(head->desc);
+  name_printer(head->desc, user->name);
+  if (user->hp == 0)
+    return ;
   if (head->obj == 13)
     return ;
   if (head->choose_obj != NULL && user->obj_tab[head->obj - 1] == 0)
@@ -84,7 +92,7 @@ void  read_game(s_node *head, u_node *user)
       print_option(head->choose_two);
     if (head->choose_obj != NULL)
       print_option(head->choose_obj);
-    write(1, "|| go back\n|| quit\n", 19);
+    printer("|| inventory\n|| go back\n|| quit\n");
     choice = get_stdin(head->choose_one, head->choose_two, head->choose_obj);
   }
   if (choice == 1 && head->option1 != NULL)
@@ -109,7 +117,7 @@ void  read_game(s_node *head, u_node *user)
       read_game(head->back, user);
     else
     {
-      write(1, "\n|| You're at the start point.", 31);
+      printer("\n|| You cannot go back.");
       read_game(head, user);
     }
   }
@@ -123,6 +131,13 @@ void  read_game(s_node *head, u_node *user)
   {
     help(1);
     read_game(head, user);
+  }
+  if (choice == 8)
+  {
+    if (user->checkpoint == head)
+      read_game(head, user);
+    else
+      read_game(user->checkpoint, user);
   }
   return ;
 }
