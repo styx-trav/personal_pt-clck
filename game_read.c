@@ -92,7 +92,10 @@ void  read_game(s_node *head, u_node *user)
       print_option(head->choose_two);
     if (head->choose_obj != NULL)
       print_option(head->choose_obj);
-    printer("|| inventory\n|| go back\n|| quit\n");
+    printer("|| inventory\n");
+    if (head->back != NULL)
+      printer("|| go back\n");
+    printer("|| help\n|| quit\n");
     choice = get_stdin(head->choose_one, head->choose_two, head->choose_obj);
   }
   if (choice == 1 && head->option1 != NULL)
