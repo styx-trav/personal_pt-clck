@@ -1,13 +1,31 @@
 #include "libby.h"
 
+o_node  *create_onode(char *name, int mod, int have_it)
+{
+  o_node  *obj;
+
+  obj = NULL;
+  obj = (o_node *)malloc(sizeof(o_node));
+  if (obj == NULL)
+    return (NULL);
+  obj->name = name;
+  obj->mod = mod;
+  obj->have_it = have_it;
+}
+
 void  free_prot_u(u_node  *user)
 {
+  int i;
+
+  i = 0;
   if (user->name != NULL)
     free(user->name);
-  if (user->obj_tab != NULL)
-    free(user->obj_tab);
-  if (user->obj_names != NULL)
-    free(user->obj_names);
+  if (user->objs != NULL)
+  {
+    while (user->objs[i] != NULL)
+      free(user->objs[i]);
+    free(user->objs);
+  }
   free(user);
 }
 
@@ -21,6 +39,9 @@ u_node  *create_user(int tab)
   user = (u_node *)malloc(sizeof(u_node));
   if (user == NULL)
     return (NULL);
+  user->objs = NULL;
+  user->name = NULL;
+  user->checkpoint = NULL;
   write(1, "\n|| Please enter a name (26 char max):\n\n", 40);
   len = read(1, buffer, 26);
   while (len == 0)
@@ -43,30 +64,20 @@ u_node  *create_user(int tab)
     i++;
   }
   user->name[i] = '\0';
-  user->obj_tab = malloc(sizeof(int) * tab);
-  if (user->obj_tab == NULL)
+  user->objs = malloc(sizeof(o_node *) * (tab + 1));
+  if (user->objs == NULL)
   {
     free_prot_u(user);
     return (NULL);
   }
   i = 0;
-  while (i < 3)
+  while (i <= tab)
   {
-    user->obj_tab[i] = 0;
+    user->objs[i] = NULL;
     i++;
   }
-  user->obj_names = malloc(sizeof(char *) * 4);
-  if (user->obj_names == NULL)
-  {
-    free_prot_u(user);
-    return (NULL);
-  }
-  i = 0;
-  while (i < 3)
-  {
-    user->obj_names[i] = NULL;
-    i++;
-  }
+  user->objs[0] = create_onode("chains", 4, 1);
+  user->i = 1;
   user->hp = 25;
   return (user);
 }
@@ -75,14 +86,21 @@ void  read_user(u_node  *user)
 {
   int num;
   int i;
+  char  a;
 
   num = 0;
   i = 0;
-  while (i < 3)
-  {
-    if (user->obj_tab[i] != 0)
-      num++;
-    i++;
-  }
-  printf("\n|| Current user stats:\n|| name: %s\n|| objects found: %d\n", user->name, num);
+  if (user == NULL)
+    return ;
+  printer("\n|| Current user stats:\n|| name: \0");
+  printer(user->name);
+  printer("\n|| hp: \0");
+  a = user->hp / 10 + 48;
+  write(1, &a, 1);
+  a = user->hp % 10 + 48;
+  write(1, &a, 1);
+  printer("\n|| objects found: \0");
+  a = user->i + 48;
+  write(1, &a, 1);
+  write(1, "\n", 1);
 }

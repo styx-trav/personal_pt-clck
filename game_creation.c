@@ -21,6 +21,7 @@ s_node  *create_snode(char *desc)
   new_item->option1 = NULL;
   new_item->option2 = NULL;
   new_item->back = NULL;
+  //new_item->char_cre = NULL;
   return (new_item);
 }
 
@@ -32,6 +33,8 @@ void  free_prot(s_node  *head)
       free_prot(head->option1);
     if (head->option2 != NULL)
       free_prot(head->option2);
+    //if (head->char_cre != NULL)
+      //free_prot_c(head->char_cre);
     free(head);
   }
 }

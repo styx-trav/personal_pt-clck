@@ -5,6 +5,13 @@
 # include <stdio.h>
 # include <unistd.h>
 
+typedef struct  obj_node
+{
+  char  *name;
+  int mod;
+  int have_it;
+}               o_node;
+
 typedef struct  scene_node
 {
   int obj;
@@ -21,15 +28,16 @@ typedef struct  scene_node
   struct scene_node *option2;
   struct scene_node *back;
   struct scene_node *unlocks;
+  //c_node  *char_cre;
 }               s_node;
 
 typedef struct  user_node
 {
   char  *name;
-  int *obj_tab;
-  char  **obj_names;
+  o_node  **objs;
   s_node  *checkpoint;
   int hp;
+  int i;
 }               u_node;
 
 //from game_read.c, my list reading function

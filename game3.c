@@ -43,7 +43,7 @@ s_node  *create_game3(u_node *user)
   current->option1 = create_snode("That motherfucker.\nRight, next time.\n");
   current->option1->damage = 25;
   current->option1->damage_msg = "|| As you fight to turn your head to the side,\n|| a knife plunges into the side of your neck.\n|| Blood pours out of the wound,\n|| into your throat,\n|| into your lungs.";
-  current->option2 = create_snode("It's difficult to move, but you manage to drag your head to the side.\nThe rocky ground catches in your hair - has it grown ? - and so it takes you a second, but eventually you catch the flicker of flames against the walls of the cave.\nAnd behind the flames: her. She's crouching, looking for something, but as you catch her eye she catches yours.\nShe goes for her knife and pounces.");
+  current->option2 = create_snode("It's difficult to move, but you manage to drag your head to the side.\nThe rocky ground catches in your hair - has it grown ? - and so it takes you a second, but eventually you catch the flicker of flames against the walls of the cave.\nAnd behind the flames: her.\nShe's crouching, looking for something, but as you catch her eye she catches yours.\nShe goes for her knife and pounces.");
   current = current->option2;
 
   user->checkpoint = start;

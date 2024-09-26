@@ -26,3 +26,30 @@ maybe add checkpoints ? Like for bigger zones we could add pointers to a checkpo
 go back glitches fsr -no ??? ig
 also give a rulebook of some kind so people know what to do: "help" command
 rulebook added, in help.c
+
+alright, let's talk fight mechanics.
+i want to add a character component to scene_nodes. These characters/creatures will have their own structures, which we can use for basic dialogue, damage and hp tracking. we also might want to add an "equipped_att" and "equipped_def" component in the user_node so we can have an object equipped as you fight. That equipped object can shield you from damage (see: def), or deal some more (see: att). Fight will always be an option when a character/creature is present - in fact, we might add it directly to the game_read choice structure so it can free up the other choices for peaceful or flipped options.
+
+alright, so:
+
+a) c_nodes allocated in s_nodes with components: name, weak points, dialogue one-liners, attack schematics/mechanics, maybe death taglines ? (char/cre death, user death), and weapon/shield (just one for now)
+b) game_read immediate "fight" send to a fight_read(head, user);
+c) user tab component of a weapon/shield structure from the inventory, as in every object will have multiple components: a placement(within the struct tab), a name, an attack (pos) or defence (neg) boost (or 0 for neither), and a have_it (1 for yes, 0 for no)
+=> this will also make inventory access significantly easier
+=> do I even need a have_it at this point ? If I just copy the object from the room/char_cre into my inventory, then if it's in there I have it, right ? might also need to change my locked room mechanic to accomodate
+d) 
+
+//for safekeeping
+typedef struct  charcre_node
+{
+  char  *name;
+  char  *desc;
+  char  *strike1;
+  char  *strike2;
+  char  *strike3;
+  char  *c_death;
+  char  *u_death;
+  o_node	*obj;
+  int att;
+  int def;
+}               c_node;
