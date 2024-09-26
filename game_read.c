@@ -136,11 +136,6 @@ void  read_game(s_node *head, u_node *user)
     read_game(head, user);
   }
   if (choice == 8)
-  {
-    if (user->checkpoint == head)
-      read_game(head, user);
-    else
-      read_game(user->checkpoint, user);
-  }
+    read_game(user->checkpoint, user);
   return ;
 }
