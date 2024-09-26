@@ -11,6 +11,7 @@ o_node  *create_onode(char *name, int mod, int have_it)
   obj->name = name;
   obj->mod = mod;
   obj->have_it = have_it;
+  return (obj);
 }
 
 void  free_prot_u(u_node  *user)
@@ -23,7 +24,10 @@ void  free_prot_u(u_node  *user)
   if (user->objs != NULL)
   {
     while (user->objs[i] != NULL)
+    {
       free(user->objs[i]);
+      i++;
+    }
     free(user->objs);
   }
   free(user);
@@ -54,6 +58,7 @@ u_node  *create_user(int tab)
   user->name = malloc(sizeof(char) * (len + 1));
   if (user->name == NULL)
   {
+    printer("freeing user for name allocation\n");
     free_prot_u(user);
     return (NULL);
   }
@@ -67,6 +72,7 @@ u_node  *create_user(int tab)
   user->objs = malloc(sizeof(o_node *) * (tab + 1));
   if (user->objs == NULL)
   {
+    printer("freeing user for objs allocation\n");
     free_prot_u(user);
     return (NULL);
   }
@@ -84,12 +90,8 @@ u_node  *create_user(int tab)
 
 void  read_user(u_node  *user)
 {
-  int num;
-  int i;
   char  a;
 
-  num = 0;
-  i = 0;
   if (user == NULL)
     return ;
   printer("\n|| Current user stats:\n|| name: \0");
@@ -102,5 +104,4 @@ void  read_user(u_node  *user)
   printer("\n|| objects found: \0");
   a = user->i + 48;
   write(1, &a, 1);
-  write(1, "\n", 1);
 }

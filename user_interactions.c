@@ -4,7 +4,7 @@ int cmp(char *str, char *str2)
 {
   int i;
 
-  if (str == NULL)
+  if (str == NULL || str2 == NULL)
     return (1);
   i = 0;
   while (str[i] && str2[i] && str2[i] == str[i])

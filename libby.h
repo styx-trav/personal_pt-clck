@@ -14,8 +14,6 @@ typedef struct  obj_node
 
 typedef struct  scene_node
 {
-  int obj;
-  int locked;
   int damage;
   char  *damage_msg;
   char  *desc;
@@ -23,12 +21,13 @@ typedef struct  scene_node
   char  *desc_obj;
   char  *choose_one;
   char  *choose_two;
-  char  *choose_obj;
+  char  *locked;
   struct scene_node *option1;
   struct scene_node *option2;
   struct scene_node *back;
   struct scene_node *unlocks;
   //c_node  *char_cre;
+  o_node  *obj;
 }               s_node;
 
 typedef struct  user_node
@@ -67,10 +66,19 @@ int get_stdin_cmp(char *str1, char *str2, char *str3, char* str4);
 //from game2.c, the half-baked fantasy universe
 //s_node  *create_game2(u_node *user);
 //from game3.c, the prisoner
-s_node  *create_game3(u_node *user);
+//s_node  *create_game3(u_node *user);
+//from tester.c, a test
+s_node  *create_game(u_node *user);
 
 //from game_creation.c, elmt creating and freeing
 s_node  *create_snode(char *desc);
 void  free_prot(s_node  *head);
+
+//from user.c, creating objects
+o_node  *create_onode(char *name, int mod, int have_it);
+
+//from inventory.c, usage and checks
+int  inventory(s_node *room, u_node *user);
+int u_has_obj(o_node **tab, o_node *obj);
 
 #endif
