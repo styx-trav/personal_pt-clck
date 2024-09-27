@@ -82,10 +82,12 @@ u_node  *create_user(int tab)
     user->objs[i] = NULL;
     i++;
   }
-  user->objs[0] = create_onode("chains", 4, 1);
-  user->i = 1;
+  user->i = 0;
+  //user->objs[0] = create_onode("chains", 4, 1);
+  //user->i = 1;
   user->equipped = NULL;
   user->hp = 25;
+  user->att = 5;
   return (user);
 }
 

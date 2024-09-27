@@ -94,6 +94,14 @@ int  inventory(s_node *room, u_node *user)
   }
   else if (obj > 0)
   {
+    if (user->objs[obj - 1] == user->equipped)
+    {
+      printer("|| You have unequipped: ");
+      printer(user->equipped->name);
+      printer(".\n");
+      user->equipped = NULL;
+      return (0);
+    }
     printer("|| You now have equipped: ");
     printer(user->objs[obj - 1]->name);
     printer(".\n|| It grants you ");
@@ -117,18 +125,4 @@ int  inventory(s_node *room, u_node *user)
     }
   }
   return (0);
-}
-
-int u_has_obj(o_node **tab, o_node *obj)
-{
-  int i;
-
-  i = 0;
-  while (tab[i] != NULL)
-  {
-    if (cmp(tab[i]->name, obj->name) == 0)
-      return (0);
-    i++;
-  }
-  return (-1);
 }

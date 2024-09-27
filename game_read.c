@@ -30,27 +30,27 @@ void  read_game(s_node *head, u_node *user)
     return ;
   //if (head->obj == 13)
     //return ;
-  if (head->obj != NULL && u_has_obj(user->objs, head->obj) != 0)
+  if (head->obj != NULL && head->obj->have_it == 0)
     printer(head->desc_obj);
   write(1, "\n\n", 2);
   if (head->choose_one != NULL)
       print_option(head->choose_one);
   if (head->choose_two != NULL)
     print_option(head->choose_two);
-  if (head->obj != NULL && u_has_obj(user->objs, head->obj) != 0)
+  if (head->obj != NULL && head->obj->have_it == 0)
     print_option(head->obj->name);
   str = NULL;
   if (head->obj != NULL)
     str = head->obj->name;
   choice = get_stdin(head->choose_one, head->choose_two, str);
-  while (choice == 0)
+  while (choice == 0 || (choice == 3 && head->obj->have_it == 1))
   {
     write(1, "\n|| Please choose one of the given options:\n", 44);
     if (head->choose_one != NULL)
       print_option(head->choose_one);
     if (head->choose_two != NULL)
       print_option(head->choose_two);
-    if (head->obj != NULL)
+    if (head->obj != NULL && head->obj->have_it == 0)
       print_option(head->obj->name);
     printer("|| inventory\n");
     if (head->back != NULL)
@@ -62,9 +62,10 @@ void  read_game(s_node *head, u_node *user)
     read_game(head->option1, user);
   if (choice == 2 && head->option2 != NULL)
     read_game(head->option2, user);
-  if (choice == 3)
+  if (choice == 3 && head->obj != NULL)
   {
     user->objs[user->i] = create_onode(head->obj->name, head->obj->mod, 1);
+    head->obj->have_it = 1;
     user->i++;
     printer("|| You now have: ");
     printer(head->obj->name);

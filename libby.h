@@ -37,6 +37,7 @@ typedef struct  user_node
   o_node  **objs;
   s_node  *checkpoint;
   int hp;
+  int att;
   int i;
 }               u_node;
 
@@ -78,8 +79,7 @@ void  free_prot(s_node  *head);
 //from user.c, creating objects
 o_node  *create_onode(char *name, int mod, int have_it);
 
-//from inventory.c, usage and checks
+//from inventory.c, usage
 int  inventory(s_node *room, u_node *user);
-int u_has_obj(o_node **tab, o_node *obj);
 
 #endif

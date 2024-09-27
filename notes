@@ -47,12 +47,12 @@ typedef struct  charcre_node
 {
   char  *name;
   char  *desc;
-  char  *strike1;
-  char  *strike2;
-  char  *strike3;
+  char  **strikes;
   char  *c_death;
   char  *u_death;
   o_node	*obj;
   int att;
   int def;
+  int	i;
+  int	hp;
 }               c_node;
