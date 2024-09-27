@@ -33,10 +33,10 @@ i want to add a character component to scene_nodes. These characters/creatures w
 alright, so:
 
 a) c_nodes allocated in s_nodes with components: name, weak points, dialogue one-liners, attack schematics/mechanics, maybe death taglines ? (char/cre death, user death), and weapon/shield (just one for now)
-b) game_read immediate "fight" send to a fight_read(head, user);
+b) if char/cre present in the room, game_read immediate "fight" send to a fight_read(head->charcre, user) and "talk" send to a dialogue_read(head->charcre, user) (with backup fight option at any time);
 
 
-!!!(still needs tests for the modifiers and how to use them when equipped)
+!!!(still needs tests for the modifiers and how to use them when equipped: now working on this aspect, update: it works)
 c) user tab component of a weapon/shield structure from the inventory, as in every object will have multiple components: a placement(within the struct tab), a name, an attack (pos) or defence (neg) boost (or 0 for neither), and a have_it (1 for yes, 0 for no)
 => this will also make !!!inventory access significantly easier
 => do I even need a !!have_it ? If I just copy the object from the room/char_cre into my inventory, then if it's in there I have it, right ? might also need to change my !!!locked room mechanic to accomodate

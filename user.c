@@ -84,6 +84,7 @@ u_node  *create_user(int tab)
   }
   user->objs[0] = create_onode("chains", 4, 1);
   user->i = 1;
+  user->equipped = NULL;
   user->hp = 25;
   return (user);
 }
@@ -91,6 +92,7 @@ u_node  *create_user(int tab)
 void  read_user(u_node  *user)
 {
   char  a;
+  int i;
 
   if (user == NULL)
     return ;
@@ -104,4 +106,28 @@ void  read_user(u_node  *user)
   printer("\n|| objects found: \0");
   a = user->i + 48;
   write(1, &a, 1);
+  printer(".\n|| currently equipped: ");
+  if (user->equipped == NULL)
+    printer("nothing.");
+  else
+  {
+    printer(user->equipped->name);
+    if (user->equipped->mod == 0)
+    {
+      printer(", with no attack or defense mods.");
+      return ;
+    }
+    printer(", with a +");
+    i = user->equipped->mod;
+    if (i < 0)
+      i = -i;
+    a = (i / 10) + 48;
+    write(1, &a, 1);
+    a = (i % 10) + 48;
+    write(1, &a, 1);
+    if (user->equipped->mod < 0)
+      printer(" protection mod.");
+    else
+      printer(" attack mod.");
+  }
 }

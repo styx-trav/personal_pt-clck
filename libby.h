@@ -33,6 +33,7 @@ typedef struct  scene_node
 typedef struct  user_node
 {
   char  *name;
+  o_node  *equipped;
   o_node  **objs;
   s_node  *checkpoint;
   int hp;

@@ -87,7 +87,35 @@ int  inventory(s_node *room, u_node *user)
   if (obj == 0)
     printer("Nothing by that name.\n");
   if (obj > 0 && room->locked != NULL && cmp(user->objs[obj - 1]->name, room->locked) == 0)
+  {
+    if (room->locked_desc != NULL)
+      printer(room->locked_desc);
     room->locked = "unlocked\0";
+  }
+  else if (obj > 0)
+  {
+    printer("|| You now have equipped: ");
+    printer(user->objs[obj - 1]->name);
+    printer(".\n|| It grants you ");
+    user->equipped = user->objs[obj - 1];
+    if (user->equipped->mod == 0)
+      printer("no modified stats.\n");
+    else
+    {
+      printer("+");
+      i = user->equipped->mod;
+      if (i < 0)
+        i = -i;
+      a = (i / 10) + 48;
+      write(1, &a, 1);
+      a = (i % 10) + 48;
+      write(1, &a, 1);
+      if (user->equipped->mod < 0)
+        printer(" protection against any damage.\n");
+      else
+        printer(" attack against any creature or object.\n");
+    }
+  }
   return (0);
 }
 

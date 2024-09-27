@@ -7,8 +7,16 @@ void  read_game(s_node *head, u_node *user)
 
   if (head == NULL)
     return ;
-  if (cmp(head->locked, "unlocked\0") == 0)
+  if (head->unlocks != NULL && cmp(head->locked, "unlocked\0") == 0)
   {
+    read_game(head->unlocks, user);
+    return ;
+  }
+  if (head->locked != NULL && user->equipped != NULL && cmp(user->equipped->name, head->locked) == 0)
+  {
+    if (head->locked_desc != NULL)
+      printer(head->locked_desc);
+    head->locked = "unlocked\0";
     read_game(head->unlocks, user);
     return ;
   }
