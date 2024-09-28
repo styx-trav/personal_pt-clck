@@ -81,6 +81,29 @@ int  inventory(s_node *room, u_node *user)
       print_option(user->objs[i]->name);
     i++;
   }
+  printer("Currently equipped: ");
+  if (user->equipped == NULL)
+    printer("nothing.\n");
+  else
+  {
+    printer(user->equipped->name);
+    printer(".\n");
+    if (user->equipped->mod != 0)
+    {
+      printer("It grants you +");
+      obj = user->equipped->mod;
+      if (obj < 0)
+        obj = -obj;
+      a = (obj / 10) + 48;
+      write(1, &a, 1);
+      a = (obj % 10) + 48;
+      write(1, &a, 1);
+      if (user->equipped->mod < 0)
+        printer(" in protection against attacks.\n");
+      else
+        printer(" in attack.\n");
+    }
+  }
   obj = inv_cmparison(user->objs, user->i);
   if (obj == -1)
     return (-1);

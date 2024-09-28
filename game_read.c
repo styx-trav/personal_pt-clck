@@ -12,7 +12,7 @@ void  read_game(s_node *head, u_node *user)
     read_game(head->unlocks, user);
     return ;
   }
-  if (head->char_cre != NULL && head->char_cre->c_lines[head->char_cre->line] == NULL)
+  if (head->char_cre != NULL && head->char_cre->lines[head->char_cre->line] == NULL)
   {
     if (head->option1 != NULL)
       read_game(head->option1, user);
