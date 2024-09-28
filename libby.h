@@ -12,6 +12,23 @@ typedef struct  obj_node
   int have_it;
 }               o_node;
 
+typedef struct  charcre_node
+{
+  char  *name;
+  char  **lines;
+  char  **dialogue;
+  char  **c_strikes;
+  char  **u_strikes;
+  char  *c_death;
+  char  *u_death;
+  o_node  *obj;
+  int line;
+  int strike;
+  int att;
+  int def;
+  int hp;
+}               c_node;
+
 typedef struct  scene_node
 {
   int damage;
@@ -26,7 +43,7 @@ typedef struct  scene_node
   struct scene_node *option2;
   struct scene_node *back;
   struct scene_node *unlocks;
-  //c_node  *char_cre;
+  c_node  *char_cre;
   o_node  *obj;
 }               s_node;
 
@@ -81,5 +98,10 @@ o_node  *create_onode(char *name, int mod, int have_it);
 
 //from inventory.c, usage
 int  inventory(s_node *room, u_node *user);
+
+//from char_cre.c, interacting (dialogue-only), creation and free
+int interact(c_node *cre, u_node *user);
+c_node  *create_cnode(char  *name, int lines, int strikes, int hp);
+void  free_prot_c(c_node *cre);
 
 #endif

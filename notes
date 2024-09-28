@@ -46,13 +46,20 @@ d)
 typedef struct  charcre_node
 {
   char  *name;
-  char  *desc;
   char  **strikes;
+  char	**lines;
   char  *c_death;
   char  *u_death;
   o_node	*obj;
   int att;
   int def;
-  int	i;
-  int	hp;
+  int strike;
+  int line;
+  int hp;
 }               c_node;
+
+git push origin -u fight_test
+
+!! need interact as a written option
+
+!! need an additinnal 2 \n's between dialogue lines

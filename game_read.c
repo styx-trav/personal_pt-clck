@@ -12,6 +12,12 @@ void  read_game(s_node *head, u_node *user)
     read_game(head->unlocks, user);
     return ;
   }
+  if (head->char_cre != NULL && head->char_cre->c_lines[head->char_cre->line] == NULL)
+  {
+    if (head->option1 != NULL)
+      read_game(head->option1, user);
+    return;
+  }
   if (head->locked != NULL && user->equipped != NULL && cmp(user->equipped->name, head->locked) == 0)
   {
     if (head->locked_desc != NULL)
@@ -28,8 +34,6 @@ void  read_game(s_node *head, u_node *user)
   name_printer(head->desc, user->name);
   if (user->hp == 0)
     return ;
-  //if (head->obj == 13)
-    //return ;
   if (head->obj != NULL && head->obj->have_it == 0)
     printer(head->desc_obj);
   write(1, "\n\n", 2);
@@ -39,11 +43,15 @@ void  read_game(s_node *head, u_node *user)
     print_option(head->choose_two);
   if (head->obj != NULL && head->obj->have_it == 0)
     print_option(head->obj->name);
+  if (head->char_cre != NULL)
+      print_option("interact");
   str = NULL;
   if (head->obj != NULL)
     str = head->obj->name;
   choice = get_stdin(head->choose_one, head->choose_two, str);
-  while (choice == 0 || (choice == 3 && head->obj->have_it == 1))
+  while (choice == 0
+    || (choice == 3 && head->obj->have_it == 1)
+    || (choice == 9 && head->char_cre == NULL))
   {
     write(1, "\n|| Please choose one of the given options:\n", 44);
     if (head->choose_one != NULL)
@@ -55,6 +63,8 @@ void  read_game(s_node *head, u_node *user)
     printer("|| inventory\n");
     if (head->back != NULL)
       printer("|| go back\n");
+    if (head->char_cre != NULL && head->char_cre->hp > 0)
+      print_option("interact");
     printer("|| help\n|| quit\n");
     choice = get_stdin(head->choose_one, head->choose_two, str);
   }
@@ -99,5 +109,18 @@ void  read_game(s_node *head, u_node *user)
   }
   if (choice == 8)
     read_game(user->checkpoint, user);
+  if (choice == 9)
+  {
+    choice = interact(head->char_cre, user);
+    if (choice == 1)
+      read_game(head->option1, user);
+    if (choice == 2)
+    {
+      head->locked = "unlocked\0";
+      read_game(head, user);
+    }
+    if (choice == -1 && head->back != NULL)
+      read_game(head->back, user);
+  }
   return ;
 }

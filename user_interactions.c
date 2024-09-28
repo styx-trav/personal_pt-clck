@@ -36,6 +36,8 @@ int compare(char *opt1, char *opt2, char *obj, char *read)
     return (7);
   if (cmp("checkpoint", read) == 0)
     return (8);
+  if (cmp("interact", read) == 0)
+    return (9);
   return (0);
 }
 
